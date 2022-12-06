@@ -1,10 +1,13 @@
 import React from 'react';
 
 const PersonalInformation = (props) => {
+    
+    const { firstName, lastName } = props;
+
     return (
         <ul>
-            <li>{ props.firstName }</li>
-            <li>{ props.lastName }</li>
+            <li>{firstName}</li>
+            <li>{lastName}</li>
         </ul>
     )
 }
