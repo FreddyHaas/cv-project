@@ -1,49 +1,36 @@
 import React, { Component } from 'react';
-import Overview from './Components/Overview.js'
+import PersonalInformation from './Components/PersonalInformation.js'
 
 class App extends Component {
   constructor() {
     super();
 
     this.state = {
-      _firstName: '',
-      _lastName: '',
-      firstName: '',
-      lastName: '',
+      personalInformation: {firstName: '', lastName: ''},
     }
   }
 
-  storeFirstName = (e) => {
-    this.setState({
-      _firstName: e.target.value,
-    })
+  handleChange = (e) => {
+    let personalInformation = this.state.personalInformation;
+    personalInformation[e.target.name] = e.target.value;
+    this.setState({personalInformation});
   }
 
-  storeLastName = (e) => {
-    this.setState({
-      _lastName: e.target.value,
-      })
-  }
-
-  onSubmitInfo = (e) => {
+  handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({
-      firstName: this.state._firstName,
-      lastName: this.state._lastName,
-      })
   }
 
   render() {
     return (
       <div>
         <div className="personal-information">
-          <h1>Personal information</h1>
-          <form onSubmit={this.onSubmitInfo}>
-            <input type="text" value = { this.state._firstName } onChange = { this.storeFirstName } />
-            <input type="text" value = { this.state._lastName } onChange = { this.storeLastName } />
+          <p>Personal information</p>
+          <form onSubmit={this.handleSubmit}>
+            <input type="text" name="firstName" value = { this.state.personalInformation.firstName } onChange = { this.handleChange } />
+            <input type="text" name="lastName" value = { this.state.personalInformation.lastName } onChange = { this.handleChange } />
             <button type="submit">Add</button>
           </form>
-          <Overview firstName={this.state.firstName} lastName={this.state.lastName} />
+          <PersonalInformation input={ this.state.personalInformation } />
         </div>
       </div>
     )
@@ -52,3 +39,6 @@ class App extends Component {
 }
 
 export default App;
+
+// Add default value;
+{/* <input type="text" name="title" value = { this.state.personalInformation.title } onChange = { this.handleChange } /> */}
