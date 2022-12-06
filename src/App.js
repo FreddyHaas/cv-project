@@ -30,7 +30,7 @@ class App extends Component {
             <input type="text" name="lastName" value = { this.state.personalInformation.lastName } onChange = { this.handleChange } />
             <button type="submit">Add</button>
           </form>
-          <PersonalInformation input={ this.state.personalInformation } />
+          <PersonalInformation {...this.state.personalInformation} />
         </div>
       </div>
     )
