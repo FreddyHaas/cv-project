@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PersonalInformation from './Components/PersonalInformation.js'
 import PersonalDetails from './Components/PersonalDetails.js'
 import Description from './Components/Description.js'
@@ -8,73 +8,68 @@ import './styles.css'
 
 
 
-class App extends Component {
-  constructor() {
-    super();
+const App = () => {
 
-    this.state = {
-      personalInformation: {firstName: '', lastName: '', title:''},
-      personalDetails: {adress: '', phoneNumber: '', email: ''},
-      description: '',
-      experience:[{position: '', company: '', city:'', from:'', to:''}],
-      education:[{university: '', city:'', degree:'', subject:'', from:'', to:''}]
-    }
+  let stateObject = {
+    personalInformation: {firstName: '', lastName: '', title:''},
+    personalDetails: {adress: '', phoneNumber: '', email: ''},
+    description: '',
+    experience:[{position: '', company: '', city:'', from:'', to:''}],
+    education:[{university: '', city:'', degree:'', subject:'', from:'', to:''}]
   }
 
-  updatePersonalInformation = (e) => {
-    let personalInformation = this.state.personalInformation;
-    personalInformation[e.target.name] = e.target.value;
-    this.setState({personalInformation});
+  const [state, setState] = useState(stateObject);
+
+  const updatePersonalInformation = (e) => {
+    let personalInformationTemp = state.personalInformation;
+    personalInformationTemp[e.target.name] = e.target.value;
+    setState({...state, personalInformation: personalInformationTemp});
   }
 
-  updatePersonalDetails = (e) => {
-    let personalDetails = this.state.personalDetails;
-    personalDetails[e.target.name] = e.target.value;
-    this.setState({personalDetails});
+  const updatePersonalDetails = (e) => {
+    let personalDetailsTemp = state.personalDetails;
+    personalDetailsTemp[e.target.name] = e.target.value;
+    setState({...state, personalDetails: personalDetailsTemp});
   }
 
-  updateExperience = (i, e) => {
-    let experience = this.state.experience;
-    experience[i][e.target.name] = e.target.value;
-    this.setState({experience});
+  const updateExperience = (i, e) => {
+    let experienceTemp = state.experience;
+    experienceTemp[i][e.target.name] = e.target.value;
+    setState({...state, experience: experienceTemp});
   }
 
-  removeExperienceFields = (i) => {
-    let experience = this.state.experience;
-    experience.splice(i,1);
-    this.setState({experience});
+  const removeExperienceFields = (i) => {
+    let experienceTemp = state.experience;
+    experienceTemp.splice(i,1);
+    setState({...state, experience: experienceTemp});
   }
 
-  addExperienceFields = () => {
-    this.setState({
-      experience: [...this.state.experience, {position: '', company: '', city:'', from:'', to:''}]
+  const addExperienceFields = () => {
+    setState({
+      ...state, experience: [...state.experience, {position: '', company: '', city:'', from:'', to:''}]
     })
   }
 
-  addEducationFields = () => {
-    this.setState({
-      education: [...this.state.education, {university: '', city:'', degree:'', subject:'', from:'', to:''}]
+  const addEducationFields = () => {
+    setState({
+      ...state, education: [...state.education, {university: '', city:'', degree:'', subject:'', from:'', to:''}]
     })
   }
 
-  removeEducationFields = (i) => {
-    let education = this.state.education;
-    education.splice(i,1);
-    this.setState({education});
+  const removeEducationFields = (i) => {
+    let educationTemp = state.education;
+    educationTemp.splice(i,1);
+    setState({...state, education: educationTemp});
   }
 
-  updateEducation = (i, e) => {
-    let education = this.state.education;
-    education[i][e.target.name] = e.target.value;
-    this.setState({education});
+  const updateEducation = (i, e) => {
+    let educationTemp = state.education;
+    educationTemp[i][e.target.name] = e.target.value;
+    setState({...state, education: educationTemp});
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-  }
 
-  render() {
-    return (
+  return (
       <div>
         <div className="header">CV CREATOR</div>
         <div className="main">
@@ -82,63 +77,61 @@ class App extends Component {
             <div className="personal-information">
               <p>Personal information</p>
               <form>
-                <input type="text" name="firstName" placeholder="First Name" value = { this.state.personalInformation.firstName } onChange = { this.updatePersonalInformation } />
-                <input type="text" name="lastName" placeholder="Last Name" value = { this.state.personalInformation.lastName } onChange = { this.updatePersonalInformation } />
-                <input type="text" name="title" placeholder="Title" value = { this.state.personalInformation.title } onChange = { this.updatePersonalInformation } />
-                <input type="text" name="adress" placeholder="Adress" value = { this.state.personalDetails.adress } onChange = { this.updatePersonalDetails } />
-                <input type="text" name="phoneNumber" placeholder="Phone Number" value = { this.state.personalDetails.phoneNumber } onChange = { this.updatePersonalDetails } />
-                <input type="text" name="email" placeholder="Email" value = { this.state.personalDetails.email } onChange = { this.updatePersonalDetails } />
-                <input type="text" name="description" placeholder="Description" value = { this.state.description } onChange = { ((e) => {this.setState({description: e.target.value})}) } id="description-input" />
+                <input type="text" name="firstName" placeholder="First Name" value = { state.personalInformation.firstName } onChange = { updatePersonalInformation } />
+                <input type="text" name="lastName" placeholder="Last Name" value = { state.personalInformation.lastName } onChange = { updatePersonalInformation } />
+                <input type="text" name="title" placeholder="Title" value = { state.personalInformation.title } onChange = { updatePersonalInformation } />
+                <input type="text" name="adress" placeholder="Adress" value = { state.personalDetails.adress } onChange = { updatePersonalDetails } />
+                <input type="text" name="phoneNumber" placeholder="Phone Number" value = { state.personalDetails.phoneNumber } onChange = { updatePersonalDetails } />
+                <input type="text" name="email" placeholder="Email" value = { state.personalDetails.email } onChange = { updatePersonalDetails } />
+                <input type="text" name="description" placeholder="Description" value = { state.description } onChange = { ((e) => setState({...state, description: e.target.value})) } id="description-input" />
               </form>
               </div>
             <div className="experience-input">
               <p>Experience</p>
               <form>
-                {this.state.experience.map((element, index) => (
+                {state.experience.map((element, index) => (
                     <div className="experience-input-form" key={index}>
-                      <input type="text" name="position" placeholder="Position" value = { element.position || '' } onChange = { (e) => {this.updateExperience(index, e)} } />
-                      <input type="text" name="company" placeholder="Company" value = { element.company || '' } onChange = { (e) => {this.updateExperience(index, e)} } />
-                      <input type="text" name="city" placeholder="City" value = { element.city || '' } onChange = { (e) => {this.updateExperience(index, e)} } />
-                      <input type="text" name="from" placeholder="From" value = { element.from || '' } onChange = { (e) => {this.updateExperience(index, e)} } />
-                      <input type="text" name="to" placeholder="To" value = { element.to || '' } onChange = { (e) => {this.updateExperience(index, e)} } />
-                      <button className="button delete" type="button" onClick={() => this.removeExperienceFields()}>Remove</button>
+                      <input type="text" name="position" placeholder="Position" value = { element.position || '' } onChange = { (e) => {updateExperience(index, e)} } />
+                      <input type="text" name="company" placeholder="Company" value = { element.company || '' } onChange = { (e) => {updateExperience(index, e)} } />
+                      <input type="text" name="city" placeholder="City" value = { element.city || '' } onChange = { (e) => {updateExperience(index, e)} } />
+                      <input type="text" name="from" placeholder="From" value = { element.from || '' } onChange = { (e) => {updateExperience(index, e)} } />
+                      <input type="text" name="to" placeholder="To" value = { element.to || '' } onChange = { (e) => {updateExperience(index, e)} } />
+                      <button className="button delete" type="button" onClick={() => removeExperienceFields(index)}>Remove</button>
                     </div>
                 ))}
-                <button className="button add" type="button" onClick={() => this.addExperienceFields()}>Add</button>
+                <button className="button add" type="button" onClick={addExperienceFields}>Add</button>
               </form>
             </div>
             <div className="education-input">
               <p>Education</p>
               <form>
-                {this.state.education.map((element, index) => (
+                {state.education.map((element, index) => (
                   <div className="education-input-form" key={index}>
-                    <input type="text" name="university" placeholder="University" value = { element.university || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
-                    <input type="text" name="city" placeholder="City" value = { element.city || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
-                    <input type="text" name="degree" placeholder="Degree" value = { element.degree || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
-                    <input type="text" name="subject" placeholder="Subject" value = { element.subject || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
-                    <input type="text" name="from" placeholder="From" value = { element.from || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
-                    <input type="text" name="to" placeholder="To" value = { element.to || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
-                    <button className="button delete" type="button" onClick={() => this.removeEducationFields()}>Remove</button>
+                    <input type="text" name="university" placeholder="University" value = { element.university || '' } onChange = { (e) => {updateEducation(index, e)} } />
+                    <input type="text" name="city" placeholder="City" value = { element.city || '' } onChange = { (e) => {updateEducation(index, e)} } />
+                    <input type="text" name="degree" placeholder="Degree" value = { element.degree || '' } onChange = { (e) => {updateEducation(index, e)} } />
+                    <input type="text" name="subject" placeholder="Subject" value = { element.subject || '' } onChange = { (e) => {updateEducation(index, e)} } />
+                    <input type="text" name="from" placeholder="From" value = { element.from || '' } onChange = { ((e) => {updateEducation(index, e)}) } />
+                    <input type="text" name="to" placeholder="To" value = { element.to || '' } onChange = { (e) => {updateEducation(index, e)} } />
+                    <button className="button delete" type="button" onClick={() => removeEducationFields(index)}>Remove</button>
                   </div>
                 ))}
-                  <button className="button add" type="button" onClick={() => this.addEducationFields()}>Add</button>
+                  <button className="button add" type="button" onClick={addEducationFields}>Add</button>
               </form>
             </div>
           </div>
           <div className="cv">
-            <PersonalInformation {...this.state.personalInformation}/>
+            <PersonalInformation {...state.personalInformation}/>
             <div className="cv-main">
-              <Description input = {this.state.description}/>
-              <Experience experiences = {this.state.experience}/>
-              <Education educationList = {this.state.education}/>
+              <Description input = {state.description}/>
+              <Experience experiences = {state.experience}/>
+              <Education educationList = {state.education}/>
             </div>
-            <PersonalDetails {...this.state.personalDetails}/>
+            <PersonalDetails {...state.personalDetails}/>
           </div>
         </div>
       </div>
     )
-  }
-
 }
 
 export default App;
