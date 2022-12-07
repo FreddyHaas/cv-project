@@ -2,13 +2,13 @@ import React from 'react';
 
 const PersonalInformation = (props) => {
     
-    const { firstName, lastName } = props;
+    const { firstName, lastName, title } = props;
 
     return (
-        <ul>
-            <li>{firstName}</li>
-            <li>{lastName}</li>
-        </ul>
+        <div className="cv-header">
+            <p>{firstName} {lastName}</p>
+            <p>{title}</p>
+        </div>
     )
 }
 
