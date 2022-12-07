@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PersonalInformation from './Components/PersonalInformation.js'
 import PersonalDetails from './Components/PersonalDetails.js'
 import Description from './Components/Description.js'
+import Experience from './Components/Experience.js'
+import Education from './Components/Education.js';
 import './styles.css'
 
 
@@ -14,7 +16,8 @@ class App extends Component {
       personalInformation: {firstName: '', lastName: '', title:''},
       personalDetails: {adress: '', phoneNumber: '', email: ''},
       description: '',
-      experience:[{position: '', company: '', city:'', from:'', to:''}] 
+      experience:[{position: '', company: '', city:'', from:'', to:''}],
+      education:[{university: '', city:'', degree:'', subject:'', from:'', to:''}]
     }
   }
 
@@ -39,13 +42,31 @@ class App extends Component {
   removeExperienceFields = (i) => {
     let experience = this.state.experience;
     experience.splice(i,1);
-    this.setState({experience})
+    this.setState({experience});
   }
 
   addExperienceFields = () => {
-    this.setState(({
+    this.setState({
       experience: [...this.state.experience, {position: '', company: '', city:'', from:'', to:''}]
-    }))
+    })
+  }
+
+  addEducationFields = () => {
+    this.setState({
+      education: [...this.state.education, {university: '', city:'', degree:'', subject:'', from:'', to:''}]
+    })
+  }
+
+  removeEducationFields = (i) => {
+    let education = this.state.education;
+    education.splice(i,1);
+    this.setState({education});
+  }
+
+  updateEducation = (i, e) => {
+    let education = this.state.education;
+    education[i][e.target.name] = e.target.value;
+    this.setState({education});
   }
 
   handleSubmit = (e) => {
@@ -70,7 +91,7 @@ class App extends Component {
                 <input type="text" name="description" placeholder="Description" value = { this.state.description } onChange = { ((e) => {this.setState({description: e.target.value})}) } id="description-input" />
               </form>
               </div>
-            <div className="experience">
+            <div className="experience-input">
               <p>Experience</p>
               <form>
                 {this.state.experience.map((element, index) => (
@@ -86,11 +107,30 @@ class App extends Component {
                 <button className="button add" type="button" onClick={() => this.addExperienceFields()}>Add</button>
               </form>
             </div>
+            <div className="education-input">
+              <p>Education</p>
+              <form>
+                {this.state.education.map((element, index) => (
+                  <div className="education-input-form" key={index}>
+                    <input type="text" name="university" placeholder="University" value = { element.university || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
+                    <input type="text" name="city" placeholder="City" value = { element.city || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
+                    <input type="text" name="degree" placeholder="Degree" value = { element.degree || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
+                    <input type="text" name="subject" placeholder="Subject" value = { element.subject || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
+                    <input type="text" name="from" placeholder="From" value = { element.from || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
+                    <input type="text" name="to" placeholder="To" value = { element.to || '' } onChange = { (e) => {this.updateEducation(index, e)} } />
+                    <button className="button delete" type="button" onClick={() => this.removeEducationFields()}>Remove</button>
+                  </div>
+                ))}
+                  <button className="button add" type="button" onClick={() => this.addEducationFields()}>Add</button>
+              </form>
+            </div>
           </div>
           <div className="cv">
             <PersonalInformation {...this.state.personalInformation}/>
             <div className="cv-main">
               <Description input = {this.state.description}/>
+              <Experience experiences = {this.state.experience}/>
+              <Education educationList = {this.state.education}/>
             </div>
             <PersonalDetails {...this.state.personalDetails}/>
           </div>
@@ -103,4 +143,3 @@ class App extends Component {
 
 export default App;
 
-// Add default value;
